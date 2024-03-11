@@ -5,14 +5,15 @@
 	import MessageForm from '$lib/components/MessageForm.svelte';
 	import { loadMessages, saveMessages, fetchMessage } from '$lib/services/MessageService';
 	import MessageHeader from '$lib/components/MessageHeader.svelte';
+	import type { User } from '$lib/models/User';
 
 	let messages: Message[] = [];
 	let container: HTMLDivElement;
 
-	const users = {
-		user: { name: 'Chris', profilePic: 'https://i.pravatar.cc/150?img=8' },
-		partner: { name: 'Holly', profilePic: 'https://i.pravatar.cc/150?img=1' }
-	};
+	const users: User[] = [
+		{ id: 'user', name: 'Chris', profilePictureUrl: 'https://i.pravatar.cc/150?img=8' },
+		{ id: 'partner', name: 'Holly', profilePictureUrl: 'https://i.pravatar.cc/150?img=1' }
+	];
 
 	onMount(() => {
 		messages = loadMessages();
@@ -46,7 +47,7 @@
 </script>
 
 <main class="flex justify-between flex-col h-screen flex-grow md:border max-w-xl">
-	<MessageHeader partner={users['partner']} on:clear={handleClear} />
+	<MessageHeader partner={users.find(user => user.id === 'partner')} on:clear={handleClear} />
 	<MessageList {messages} {users} {container} />
 	<MessageForm on:send={handleSend} />
 </main>

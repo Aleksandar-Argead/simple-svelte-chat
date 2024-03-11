@@ -1,21 +1,28 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	let message = '';
+	let message: string = '';
+	let input: HTMLInputElement;
 
 	function sendMessage() {
 		if (message.trim()) {
 			dispatch('send', message);
 			message = '';
+			input.focus();
 		}
 	}
+
+	onMount(() => {
+		input.focus();
+	});
 </script>
 
 <form class="flex p-3 space-x-2" on:submit|preventDefault={sendMessage}>
 	<input
 		type="text"
 		bind:value={message}
+		bind:this={input}
 		class="flex-grow p-2 border rounded-lg overflow-scroll border-blue-500"
 		placeholder="Say something..."
 	/>

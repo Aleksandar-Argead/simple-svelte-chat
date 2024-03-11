@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type { User } from '$lib/models/User';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let partner;
+	export let partner: User;
 
 	function clearMessages() {
 		dispatch('clear');
@@ -12,7 +13,7 @@
 
 <div class="flex items-center justify-between p-4 border-b">
 	<div class="flex items-center gap-x-4">
-		<img src={partner.profilePic} alt="User avatar" class="w-10 h-10 rounded-full" />
+		<img src={partner.profilePictureUrl} alt="User avatar" class="w-10 h-10 rounded-full" />
 		<p class="font-bold text-xl">{partner.name}</p>
 	</div>
 	<button class="" on:click|preventDefault={clearMessages}>

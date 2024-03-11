@@ -1,12 +1,18 @@
 <script lang="ts">
 	import type { Message } from '$lib/models/Message';
-	import { afterUpdate } from 'svelte';
+	import type { User } from '$lib/models/User';
+	import { afterUpdate, onMount, tick } from 'svelte';
 
-	export let users;
-	export let container: HTMLDivElement;
-	export let messages: Message[];
+	export let users: User[];
+	export let container: HTMLUListElement;
+	export let messages: Message[] = [];
 
-	afterUpdate(() => container.scrollTo(0, container.scrollHeight));
+	afterUpdate(() => {
+		requestAnimationFrame(async () => {
+			await tick();
+			container.scrollTo(0, container.scrollHeight);
+		});
+	});
 </script>
 
 <div class="flex-grow flex flex-col justify-end overflow-hidden">
@@ -24,14 +30,14 @@
 				class="p-2 flex items-start gap-x-2"
 			>
 				<img
-					src={users[message.userId].profilePic}
+					src={users.find((user) => user.id === message.userId)?.profilePictureUrl}
 					alt="User avatar"
 					class="w-10 h-10 rounded-full"
 				/>
 				<span
 					class="flex p-3 rounded-2xl"
-					class:bg-green-100={message.userId === 'user'}
-					class:bg-blue-100={message.userId === 'partner'}>{message.data}</span
+					class:bg-amber-100={message.userId === 'user'}
+					class:bg-slate-100={message.userId === 'partner'}>{message.data}</span
 				>
 			</li>
 		{/each}
